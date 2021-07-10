@@ -51,17 +51,23 @@ User.init(
 );
 
 async function getUser(userInfo) {
+    console.log(userInfo);
     try {
         const result_user = await User.findAll({
             where: {
                 username: {
-                    [Op.like]: `%${userInfo}%`,
+                    [Op.eq]: `${userInfo.username}`,
                 },
             },
         });
         if (result_user[0] == null) {
-            throw new Error("用户名或密码错误!");
+            console.log(result_user[0]);
+            throw new Error("用户名错误!");
+        } else if (userInfo.password != result_user[0].dataValues.password) {
+            console.log("密码错误");
+            throw new Error("密码错误!");
         } else {
+            console.log(result_user);
             const user_uid = result_user[0].dataValues.uid;
             const user_username = result_user[0].dataValues.username;
             const data = { uid: user_uid, username: user_username };

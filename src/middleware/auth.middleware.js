@@ -17,7 +17,7 @@ const verifyLogin = async (ctx, next) => {
     }
 
     // 判断用户是否存在
-    const result = await getUser(username);
+    const result = await getUser(ctx.request.body);
     if (result instanceof Error) {
         const error = new Error(errorTypes.USER_DOES_NOT_EXISTS);
         return ctx.app.emit("error", error, ctx);

@@ -66,6 +66,16 @@ Article.init(
                 key: "uid",
             },
         },
+        createdAt: {
+            field: "created_At",
+            type: DataTypes.TIME,
+            allowNull: true,
+        },
+        updatedAt: {
+            field: "updated_At",
+            type: DataTypes.TIME,
+            allowNull: true,
+        },
     },
     {
         timestamps: false,
@@ -80,11 +90,7 @@ Article.belongsTo(User, {
 
 async function queryArticle() {
     try {
-        const result = await Article.findAll({
-            include: {
-                model: User,
-            },
-        });
+        const result = await Article.findAll();
         console.log(result);
         return result;
     } catch (error) {
@@ -103,6 +109,7 @@ async function addArticle(article) {
             tag: data.tag,
             content: data.content,
             userId: data.userId,
+            createdAt: data.date,
         });
         console.log(result);
         return result;
@@ -112,8 +119,8 @@ async function addArticle(article) {
     }
 }
 
-async function deleteArticle(article) {
-    const { id } = article.id;
+async function deleteArticle(articleId) {
+    const { id } = articleId;
     console.log(id);
     try {
         const article_delete = await Article.destroy({
